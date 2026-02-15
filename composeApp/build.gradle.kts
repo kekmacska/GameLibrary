@@ -40,6 +40,7 @@ dependencies {
     implementation(libs.compose.material3)
     implementation(libs.compose.ui)
     implementation(libs.compose.uiToolingPreview)
+    implementation(libs.androidx.material3)
 
     debugImplementation(libs.compose.uiTooling)
 

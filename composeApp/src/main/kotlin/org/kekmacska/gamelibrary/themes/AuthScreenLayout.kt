@@ -24,7 +24,7 @@ fun AuthScreenLayout(
         modifier = Modifier
             .fillMaxSize()
             .padding(
-                if (paddingValues != null) paddingValues else PaddingValues(0.dp)
+                paddingValues ?: PaddingValues(0.dp)
             )
             .padding(horizontal = 24.dp, vertical = 32.dp),
         horizontalAlignment = Alignment.CenterHorizontally

@@ -22,12 +22,14 @@ import org.kekmacska.gamelibrary.themes.AuthTextField
 
 @Composable
 fun RegisterScreen(
-    modifier: Modifier = Modifier,
     onBackClick: () -> Unit = {}
 ) {
     var username by remember { mutableStateOf("") }
+    var usernameError by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var passwordError by remember { mutableStateOf("") }
     var confirm by remember { mutableStateOf("") }
+    var confirmError by remember { mutableStateOf("") }
 
     AuthScreenLayout(title = "Register") {
 
@@ -35,7 +37,8 @@ fun RegisterScreen(
             value = username,
             onValueChange = { username = it },
             label = "Username",
-            leadingIcon = { Icon(Icons.Rounded.AccountCircle, null) }
+            leadingIcon = { Icon(Icons.Rounded.AccountCircle, null) },
+            error = usernameError
         )
 
         Spacer(Modifier.height(16.dp))
@@ -45,7 +48,8 @@ fun RegisterScreen(
             onValueChange = { password = it },
             label = "Password",
             leadingIcon = { Icon(Icons.Rounded.Lock, null) },
-            isPassword = true
+            isPassword = true,
+            error = passwordError
         )
 
         Spacer(Modifier.height(16.dp))
@@ -55,13 +59,25 @@ fun RegisterScreen(
             onValueChange = { confirm = it },
             label = "Confirm Password",
             leadingIcon = { Icon(Icons.Rounded.Lock, null) },
-            isPassword = true
+            isPassword = true,
+            error = confirmError
         )
 
         Spacer(Modifier.height(24.dp))
 
         Button(
-            onClick = { /* TODO */ },
+            onClick = {
+                usernameError = if (username.isBlank()) "Required" else ""
+                passwordError = when {
+                    password.isBlank() -> "Required"
+                    else -> ""
+                }
+                confirmError = when {
+                    confirm.isBlank() -> "Required"
+                    password != confirm -> "Passwords don't match"
+                    else -> ""
+                }
+            },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Create Account")

@@ -1,15 +1,16 @@
 [versions]
-agp = "9.0.0"
+agp = "9.0.1"
 android-compileSdk = "36"
 android-minSdk = "24"
 android-targetSdk = "36"
 androidx-activity = "1.12.4"
 androidx-lifecycle = "2.9.6"
-composeMultiplatform = "1.10.0"
+composeMultiplatform = "1.10.1"
 kotlin = "2.3.10"
 material3 = "1.10.0-alpha05"
 materialIcons = "1.7.8"
 navi = "2.9.7"
+material3Version = "1.4.0"
 
 [libraries]
 navi = { module = "androidx.navigation:navigation-compose", version.ref = "navi" }
@@ -23,6 +24,7 @@ compose-foundation = { module = "org.jetbrains.compose.foundation:foundation", v
 compose-material3 = { module = "org.jetbrains.compose.material3:material3", version.ref = "material3" }
 compose-ui = { module = "org.jetbrains.compose.ui:ui", version.ref = "composeMultiplatform" }
 compose-uiToolingPreview = { module = "org.jetbrains.compose.ui:ui-tooling-preview", version.ref = "composeMultiplatform" }
+androidx-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3Version" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

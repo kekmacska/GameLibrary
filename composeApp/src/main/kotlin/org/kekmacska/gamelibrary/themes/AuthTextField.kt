@@ -34,7 +34,7 @@ fun AuthTextField(
         onValueChange = onValueChange,
         label = {
             Text(
-                if (error.isEmpty()) label else error,
+                error.ifEmpty { label },
                 color = if (error.isNotEmpty()) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface
             )
         },
