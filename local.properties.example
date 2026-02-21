@@ -1,0 +1,5 @@
+# This is an example enviroment configuration. Enter your Android SDK's location and
+# your backend api url endpoint here
+
+# sdk.dir=/opt/android-sdk
+# API_URL=192.168.1.1:8000/api/thing

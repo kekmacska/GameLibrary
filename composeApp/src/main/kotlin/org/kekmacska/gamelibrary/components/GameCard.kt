@@ -1,6 +1,5 @@
 package org.kekmacska.gamelibrary.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -14,26 +13,27 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import org.kekmacska.gamelibrary.models.MainScreenCard
+import coil3.compose.AsyncImage
+import org.kekmacska.gamelibrary.models.Game
 
 @Composable
-fun GameCardComponent(cardModel: MainScreenCard) {
+fun GameCardComponent(cardModel: Game, onClick: (Int) -> Unit) {
     Card(
+        onClick = { onClick(cardModel.id) },
         modifier = Modifier
             .padding(horizontal = 16.dp, vertical = 10.dp)
             .fillMaxWidth(),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
         Column {
-            Image(
+            AsyncImage(
+                model = cardModel.cover, //cardModel.cover
+                contentDescription = null,
                 modifier = Modifier
                     .fillMaxWidth()
                     .aspectRatio(16f / 9f),
-                contentScale = ContentScale.Fit,
-                painter = painterResource(id = cardModel.image),
-                contentDescription = "${cardModel.name}'s image"
+                contentScale = ContentScale.Crop
             )
         }
         Column(

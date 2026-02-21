@@ -26,7 +26,8 @@ import org.kekmacska.gamelibrary.themes.AuthTextField
 @Composable
 fun LoginScreen(
     paddingValues: PaddingValues,
-    onRegisterClick: () -> Unit = {}
+    onRegisterClick: () -> Unit = {},
+    onNotNowClick: () -> Unit = {}
 ) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -75,6 +76,15 @@ fun LoginScreen(
                 color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.clickable { onRegisterClick() }
             )
+        }
+
+        Spacer(Modifier.height(40.dp))
+
+        Row {
+            Text(
+                "Not now",
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.clickable { onNotNowClick() })
         }
     }
 }

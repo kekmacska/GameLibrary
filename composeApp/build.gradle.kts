@@ -1,6 +1,9 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.composeCompiler)
+    alias(libs.plugins.kotlinSerialization)
 }
 
 android {
@@ -13,7 +16,17 @@ android {
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
+        val localProps = Properties()
+        localProps.load(project.rootProject.file("local.properties").inputStream())
+        val apiUrl = localProps.getProperty("API_URL") ?: ""
+
+        buildConfigField("String", "API_URL", "\"$apiUrl\"")
     }
+
+    buildFeatures {
+        buildConfig = true
+    }
+
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -50,4 +63,12 @@ dependencies {
 
     implementation(libs.materialIcons)
     implementation(libs.navi)
+    implementation(libs.datastorePreferences)
+    implementation(libs.ktorCore)
+    implementation(libs.ktorOkhttp)
+    implementation(libs.ktorClientNegotiation)
+    implementation(libs.ktorSerializationJson)
+    implementation(libs.coilCompose)
+    implementation(libs.coilOkhttp)
+    implementation(libs.coil)
 }
