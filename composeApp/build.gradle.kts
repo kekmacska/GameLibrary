@@ -48,14 +48,8 @@ android {
 }
 
 dependencies {
-    implementation(libs.compose.runtime)
-    implementation(libs.compose.foundation)
     implementation(libs.compose.material3)
-    implementation(libs.compose.ui)
-    implementation(libs.compose.uiToolingPreview)
     implementation(libs.androidx.material3)
-
-    debugImplementation(libs.compose.uiTooling)
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.lifecycle.viewmodelCompose)
@@ -71,4 +65,5 @@ dependencies {
     implementation(libs.coilCompose)
     implementation(libs.coilOkhttp)
     implementation(libs.coil)
+    implementation(libs.ktorLogging)
 }

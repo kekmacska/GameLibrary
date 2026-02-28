@@ -1,3 +1,5 @@
+@file:Suppress("UnstableApiUsage")
+
 rootProject.name = "Game_Library"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 

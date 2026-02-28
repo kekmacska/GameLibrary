@@ -24,7 +24,7 @@ fun MainScreen(
     LazyVerticalGrid(
         modifier = Modifier.fillMaxSize(),
         columns = GridCells.Fixed(3),
-        contentPadding = PaddingValues(8.dp)
+        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 30.dp)
     ) {
         items(cards) { card ->
             GameCardComponent(card) {

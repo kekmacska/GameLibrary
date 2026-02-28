@@ -46,6 +46,7 @@ class MainActivity : ComponentActivity() {
             val startDestination = if (notLoggedIn) "main" else "login"
             val navController = rememberNavController()
             val activity = LocalActivity.current
+            // In your Application class or MainActivity
 
             Theme {
                 Surface(

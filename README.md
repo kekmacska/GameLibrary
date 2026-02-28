@@ -1,27 +1,25 @@
-This is a Kotlin Multiplatform project targeting Android.
+# 🎮 Game Library — Android App
 
-* [/composeApp](./composeApp/src) is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - [commonMain](./composeApp/src/commonMain/kotlin) is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    the [iosMain](./composeApp/src/iosMain/kotlin) folder would be the right place for such calls.
-    Similarly, if you want to edit the Desktop (JVM) specific part, the [jvmMain](./composeApp/src/jvmMain/kotlin)
-    folder is the appropriate location.
-
-### Build and Run Android Application
-
-To build and run the development version of the Android app, use the run configuration from the run widget
-in your IDE’s toolbar or build it directly from the terminal:
-- on macOS/Linux
-  ```shell
-  ./gradlew :composeApp:assembleDebug
-  ```
-- on Windows
-  ```shell
-  .\gradlew.bat :composeApp:assembleDebug
-  ```
+A fully open‑source game library application for viewing information about computer games and potentional collectibles in them, for Android, built with native Kotlin, Jetpack Compose, and Material 3 Monet dynamic theming. 
 
 ---
 
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
+## ⚙️ Tech Stack
+
+### **Core Technologies**
+- **Kotlin**
+- **Jetpack Compose** (UI)
+- **Material 3** with dynamic color (Monet)
+- **Backend:** The original backend uses Laravel 12
+- **Database:** The original database handled by the backend is MariaDB
+
+### **Libraries Used**
+- **Navigation:** AndroidX Navigation Compose  
+- **Image Loading:** Coil 3 (Compose + OkHttp integration)  
+- **Networking:** Ktor Client  
+- **JSON Serialization:** KotlinX Serialization (via Ktor)  
+- **Icons:** Material Icons  
+- **Environment variables:** `local.properties`  
+  - Not committed to version control  
+  - [See example](./local.properties.example)
+  - To achive a successful build, you must provide your backend API URL and the location of Android SDK on your system
