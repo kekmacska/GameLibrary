@@ -40,7 +40,7 @@ fun MainScreen(
             LazyVerticalGrid(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(bottom = 80.dp), // Padding to avoid floating button covering
+                    .padding(bottom = 80.dp),
                 columns = GridCells.Fixed(3),
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 30.dp)
             ) {
@@ -54,7 +54,7 @@ fun MainScreen(
         } else {
             // LazyColumn for List Layout
             LazyColumn(
-                modifier = Modifier.padding(bottom = 80.dp), // Padding for floating action button
+                modifier = Modifier.padding(bottom = 80.dp),
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 30.dp)
             ) {
                 items(items) { item ->
