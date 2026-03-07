@@ -33,50 +33,58 @@ fun MainScreen(
 ) {
     val items by viewModel.games.collectAsState()
     val isGridLayout by viewModel.isGridLayout.collectAsState()
+    val error by viewModel.error.collectAsState()
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        // LazyVerticalGrid for Grid Layout
-        if (isGridLayout) {
-            LazyVerticalGrid(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(bottom = 80.dp),
-                columns = GridCells.Fixed(3),
-                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 30.dp)
-            ) {
-                items(items) { card ->
-                    GameCardComponent(card) {
-                        viewModel.selectGame(card)
-                        navController.navigate("details")
+    if (error == null) {
+        Box(modifier = Modifier.fillMaxSize()) {
+            // LazyVerticalGrid for Grid Layout
+            if (isGridLayout) {
+                LazyVerticalGrid(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(bottom = 80.dp),
+                    columns = GridCells.Fixed(3),
+                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 30.dp)
+                ) {
+                    items(items) { card ->
+                        GameCardComponent(card) {
+                            viewModel.selectGame(card)
+                            navController.navigate("details")
+                        }
+                    }
+                }
+            } else {
+                // LazyColumn for List Layout
+                LazyColumn(
+                    modifier = Modifier.padding(bottom = 80.dp),
+                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 30.dp)
+                ) {
+                    items(items) { item ->
+                        GameListComponent(cardModel = item) {
+                            viewModel.selectGame(item)
+                            navController.navigate("details")
+                        }
                     }
                 }
             }
-        } else {
-            // LazyColumn for List Layout
-            LazyColumn(
-                modifier = Modifier.padding(bottom = 80.dp),
-                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 30.dp)
+
+            // Floating Action Button to toggle between Grid and List Layout
+            FloatingActionButton(
+                onClick = { viewModel.ToggleLayout() },
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(16.dp, 16.dp, 16.dp, 50.dp)
             ) {
-                items(items) { item ->
-                    GameListComponent(cardModel = item) {
-                        viewModel.selectGame(item)
-                        navController.navigate("details")
-                    }
-                }
+                Icon(
+                    imageVector = if (isGridLayout) Icons.Filled.FormatListNumbered else Icons.Filled.GridOn,
+                    contentDescription = "Toggle Layout"
+                )
             }
         }
-
-        // Floating Action Button to toggle between Grid and List Layout
-        FloatingActionButton(
-            onClick = { viewModel.ToggleLayout() },
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(16.dp, 16.dp, 16.dp, 50.dp)
-        ) {
-            Icon(
-                imageVector = if (isGridLayout) Icons.Filled.FormatListNumbered else Icons.Filled.GridOn,
-                contentDescription = "Toggle Layout"
-            )
+    } else {
+        ErrorScreen(error) {
+            viewModel.loadRandomGames()
+            viewModel.clearError()
         }
     }
 }
