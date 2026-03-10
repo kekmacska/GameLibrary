@@ -14,6 +14,15 @@ suspend fun Context.saveNotLoggedIn() {
     userPrefs.edit { prefs -> prefs[NOT_LOGGED_IN_KEY] = true }
 }
 
+suspend fun Context.saveLoggedIn() {
+    userPrefs.edit { prefs -> prefs[NOT_LOGGED_IN_KEY] = false }
+}
+
 //read
 val Context.NotLoggedInSelectedFlow
     get() = userPrefs.data.map { prefs -> prefs[NOT_LOGGED_IN_KEY] ?: false }
+
+val Context.isLoggedInFlow
+    get() = userPrefs.data.map { prefs ->
+        !(prefs[NOT_LOGGED_IN_KEY] ?: true)
+    }
