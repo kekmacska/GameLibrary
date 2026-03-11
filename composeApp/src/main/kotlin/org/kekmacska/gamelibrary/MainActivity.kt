@@ -14,7 +14,6 @@ import androidx.compose.animation.scaleIn
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.rememberDrawerState
@@ -54,6 +53,7 @@ class MainActivity : ComponentActivity() {
             val mainViewModel: MainViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
             val error by mainViewModel.error.collectAsState(initial = null)
             val currentRoute = navBackStackEntry?.destination?.route
+            val drawerState=rememberDrawerState(initialValue = DrawerValue.Closed)
             val showDrawer = currentRoute !in listOf("login", "register") && error == null
             val activity = LocalActivity.current
 
@@ -62,13 +62,10 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    ModalNavigationDrawer(
-                        drawerState = rememberDrawerState(DrawerValue.Closed),
-                        drawerContent = {
-                            if (showDrawer) {
-                                SideBarLeft(navController)
-                            }
-                        }
+                    SideBarLeft(
+                        navController=navController,
+                        drawerState=drawerState,
+                        showDrawer=showDrawer
                     ) {
                         NavHost(
                             navController = navController,
