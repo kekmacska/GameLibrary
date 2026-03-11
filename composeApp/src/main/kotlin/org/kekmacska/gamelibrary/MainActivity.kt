@@ -53,7 +53,7 @@ class MainActivity : ComponentActivity() {
             val mainViewModel: MainViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
             val error by mainViewModel.error.collectAsState(initial = null)
             val currentRoute = navBackStackEntry?.destination?.route
-            val drawerState=rememberDrawerState(initialValue = DrawerValue.Closed)
+            val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
             val showDrawer = currentRoute !in listOf("login", "register") && error == null
             val activity = LocalActivity.current
 
@@ -63,9 +63,9 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     SideBarLeft(
-                        navController=navController,
-                        drawerState=drawerState,
-                        showDrawer=showDrawer
+                        navController = navController,
+                        drawerState = drawerState,
+                        showDrawer = showDrawer
                     ) {
                         NavHost(
                             navController = navController,
@@ -103,7 +103,13 @@ class MainActivity : ComponentActivity() {
                                 Scaffold { padding ->
                                     LoginScreen(
                                         paddingValues = padding,
-                                        onRegisterClick = { navController.navigate("register") },
+                                        onRegisterClick = {
+                                            navController.navigate("register") {
+                                                popUpTo("login") {
+                                                    inclusive = true
+                                                }
+                                            }
+                                        },
                                         onNotNowClick = {
                                             scope.launch { context.saveNotLoggedIn() }
                                             navController.navigate("main")
@@ -142,7 +148,13 @@ class MainActivity : ComponentActivity() {
                             ) {
                                 Scaffold {
                                     RegisterScreen(
-                                        onBackClick = { navController.popBackStack() }
+                                        onBackClick = {
+                                            navController.navigate("login") {
+                                                popUpTo("register") {
+                                                    inclusive = true
+                                                }
+                                            }
+                                        }
                                     )
                                 }
                             }

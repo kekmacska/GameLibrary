@@ -3,7 +3,6 @@ package org.kekmacska.gamelibrary.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -51,7 +50,12 @@ fun SideBarLeft(
                                 if (isLoggedIn) {
                                     coroutineScope.launch { context.saveNotLoggedIn() }
                                 } else {
-                                    navController.navigate("login")
+                                    coroutineScope.launch { drawerState.close() }
+                                    navController.navigate("login") {
+                                        popUpTo("login") {
+                                            inclusive = true
+                                        }
+                                    }
                                 }
                             }
                         )
@@ -60,7 +64,14 @@ fun SideBarLeft(
                             NavigationDrawerItem(
                                 label = { Text("Register") },
                                 selected = false,
-                                onClick = { navController.navigate("register") }
+                                onClick = {
+                                    coroutineScope.launch { drawerState.close() }
+                                    navController.navigate("register") {
+                                        popUpTo("register") {
+                                            inclusive = true
+                                        }
+                                    }
+                                }
                             )
                         }
                     }
@@ -70,10 +81,10 @@ fun SideBarLeft(
             content()
         }
 
-        if (showDrawer&&drawerState.isClosed) {
+        if (showDrawer && drawerState.isClosed) {
             Box(
                 modifier = Modifier
-                    .width(6.dp)                 // thin like a phone button
+                    .width(6.dp)
                     .fillMaxHeight(.2f)
                     .background(
                         color = MaterialTheme.colorScheme.surfaceVariant,
