@@ -9,10 +9,15 @@ import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.plugins.logging.SIMPLE
 import io.ktor.client.request.get
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
+import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import org.kekmacska.gamelibrary.BuildConfig
 import org.kekmacska.gamelibrary.models.Game
+import org.kekmacska.gamelibrary.models.LoginRequest
+import org.kekmacska.gamelibrary.models.LoginResponse
 
 object KtorClientProvider {
     val client: HttpClient by lazy {
@@ -32,6 +37,12 @@ object KtorClientProvider {
 }
 
 suspend fun getAllGames(): List<Game> {
-    return KtorClientProvider.client.get(BuildConfig.API_URL).body()
+    return KtorClientProvider.client.get("${BuildConfig.API_URL}/games").body()
 }
 
+suspend fun login(email: String, password: String): LoginResponse {
+    return KtorClientProvider.client.post("${BuildConfig.API_URL}/login") {
+        contentType(io.ktor.http.ContentType.Application.Json)
+        setBody(LoginRequest(email, password))
+    }.body()
+}

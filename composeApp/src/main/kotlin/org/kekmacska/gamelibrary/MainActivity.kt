@@ -22,19 +22,21 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
 import org.kekmacska.gamelibrary.components.SideBarLeft
-import org.kekmacska.gamelibrary.preferences.NotLoggedInSelectedFlow
+import org.kekmacska.gamelibrary.preferences.isLoggedInFlow
 import org.kekmacska.gamelibrary.preferences.saveNotLoggedIn
 import org.kekmacska.gamelibrary.screens.GameDetails
 import org.kekmacska.gamelibrary.screens.LoginScreen
 import org.kekmacska.gamelibrary.screens.MainScreen
 import org.kekmacska.gamelibrary.screens.RegisterScreen
 import org.kekmacska.gamelibrary.themes.Theme
+import org.kekmacska.gamelibrary.viewModels.AuthViewModel
 import org.kekmacska.gamelibrary.viewModels.MainViewModel
 
 class MainActivity : ComponentActivity() {
@@ -46,11 +48,12 @@ class MainActivity : ComponentActivity() {
         setContent {
             val context = LocalContext.current
             val scope = rememberCoroutineScope()
-            val notLoggedIn by context.NotLoggedInSelectedFlow.collectAsState(initial = false)
-            val startDestination = if (notLoggedIn) "main" else "login"
+            val isLoggedIn by context.isLoggedInFlow.collectAsState(initial = false)
+            val startDestination = if (isLoggedIn) "main" else "login"
             val navController = rememberNavController()
             val navBackStackEntry by navController.currentBackStackEntryAsState()
-            val mainViewModel: MainViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+            val mainViewModel: MainViewModel = viewModel()
+            val authViewModel: AuthViewModel = viewModel()
             val error by mainViewModel.error.collectAsState(initial = null)
             val currentRoute = navBackStackEntry?.destination?.route
             val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -103,6 +106,9 @@ class MainActivity : ComponentActivity() {
                                 Scaffold { padding ->
                                     LoginScreen(
                                         paddingValues = padding,
+                                        navController = navController,
+                                        authViewModel = authViewModel,
+                                        context = context,
                                         onRegisterClick = {
                                             navController.navigate("register") {
                                                 popUpTo("login") {
@@ -195,7 +201,7 @@ class MainActivity : ComponentActivity() {
                             ) {
                                 val mainEntry = navController.getBackStackEntry("main")
                                 val viewModel: MainViewModel =
-                                    androidx.lifecycle.viewmodel.compose.viewModel(mainEntry)
+                                    viewModel(mainEntry)
                                 val game = viewModel.selectedGame.collectAsState().value
                                 if (game != null) {
                                     Scaffold {

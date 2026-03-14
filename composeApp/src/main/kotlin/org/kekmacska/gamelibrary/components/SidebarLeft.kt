@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import kotlinx.coroutines.launch
+import org.kekmacska.gamelibrary.preferences.TokenStorage
 import org.kekmacska.gamelibrary.preferences.isLoggedInFlow
 import org.kekmacska.gamelibrary.preferences.saveNotLoggedIn
 
@@ -48,7 +49,11 @@ fun SideBarLeft(
                             selected = false,
                             onClick = {
                                 if (isLoggedIn) {
-                                    coroutineScope.launch { context.saveNotLoggedIn() }
+                                    coroutineScope.launch {
+                                        TokenStorage(context).clearToken()
+                                        context.saveNotLoggedIn()
+                                        drawerState.close()
+                                    }
                                 } else {
                                     coroutineScope.launch { drawerState.close() }
                                     navController.navigate("login") {

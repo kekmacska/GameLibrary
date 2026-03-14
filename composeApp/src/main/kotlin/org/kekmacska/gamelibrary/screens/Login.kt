@@ -1,5 +1,6 @@
 package org.kekmacska.gamelibrary.screens
 
+import android.content.Context
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -19,29 +20,37 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import org.kekmacska.gamelibrary.themes.AuthScreenLayout
 import org.kekmacska.gamelibrary.themes.AuthTextField
+import org.kekmacska.gamelibrary.viewModels.AuthViewModel
 
 @Composable
 fun LoginScreen(
     paddingValues: PaddingValues,
+    navController: NavController,
+    authViewModel: AuthViewModel,
+    context: Context = LocalContext.current,
     onRegisterClick: () -> Unit = {},
     onNotNowClick: () -> Unit = {}
 ) {
-    var username by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var usernameError by remember { mutableStateOf("") }
+    var emailError by remember { mutableStateOf("") }
     var passwordError by remember { mutableStateOf("") }
+
+    val emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$".toRegex()
 
     AuthScreenLayout(title = "Login", paddingValues = paddingValues) {
 
         AuthTextField(
-            value = username,
-            onValueChange = { username = it },
-            label = "Username",
+            value = email,
+            onValueChange = { email = it },
+            label = "Email",
             leadingIcon = { Icon(Icons.Rounded.AccountCircle, null) },
-            error = usernameError
+            error = emailError
         )
 
         Spacer(Modifier.height(16.dp))
@@ -58,9 +67,24 @@ fun LoginScreen(
         Spacer(Modifier.height(24.dp))
 
         Button(
+            //validation
             onClick = {
-                usernameError = if (username.isBlank()) "Required" else ""
+                emailError = when {
+                    email.isBlank() -> "Email is required"
+                    !email.matches(emailRegex) -> "Invalid email format"
+                    else -> ""
+                }
                 passwordError = if (password.isBlank()) "Required" else ""
+                if (emailError.isNotEmpty() || passwordError.isNotEmpty()) return@Button
+
+                //login
+                authViewModel.login(
+                    context = context, email = email, password = password
+                ) {
+                    navController.navigate("main") {
+                        popUpTo("login") { inclusive = true }
+                    }
+                }
             },
             modifier = Modifier.fillMaxWidth()
         ) {

@@ -86,7 +86,7 @@ fun RegisterScreen(
         Spacer(Modifier.height(16.dp))
 
         TextButton(onClick = onBackClick) {
-            Text("Back to Login")
+            Text("Back to Login.kt")
         }
     }
 }
