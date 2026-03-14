@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import org.kekmacska.gamelibrary.components.GameCardComponent
 import org.kekmacska.gamelibrary.components.GameListComponent
+import org.kekmacska.gamelibrary.components.PaginationBar
 import org.kekmacska.gamelibrary.viewModels.MainViewModel
 
 @Composable
@@ -34,6 +35,8 @@ fun MainScreen(
     val items by viewModel.games.collectAsState()
     val isGridLayout by viewModel.isGridLayout.collectAsState()
     val error by viewModel.error.collectAsState()
+    val currentPage by viewModel.currentPage.collectAsState()
+    val totalPages by viewModel.totalPages.collectAsState()
 
     if (error == null) {
         Box(modifier = Modifier.fillMaxSize()) {
@@ -80,10 +83,19 @@ fun MainScreen(
                     contentDescription = "Toggle Layout"
                 )
             }
+            
+            //pagination
+            PaginationBar(
+                currentPage = currentPage,
+                totalPages = totalPages,
+                onPrev = { viewModel.previousPage() },
+                onNext = { viewModel.nextPage() },
+                modifier = Modifier.align(Alignment.BottomCenter)
+            )
         }
     } else {
         ErrorScreen(error) {
-            viewModel.loadRandomGames()
+            viewModel.loadGames()
             viewModel.clearError()
         }
     }
