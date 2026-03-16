@@ -30,7 +30,7 @@ fun Table(content: @Composable () -> Unit) {
 @Composable
 fun Tr(content: @Composable RowScope.() -> Unit) {
     Row(Modifier.fillMaxWidth()) {
-        content()   // now this lambda is a RowScope
+        content()
     }
 }
 

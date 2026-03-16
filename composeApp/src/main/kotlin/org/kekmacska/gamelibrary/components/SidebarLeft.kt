@@ -41,6 +41,7 @@ fun SideBarLeft(
     Box {
         ModalNavigationDrawer(
             drawerState = drawerState,
+            gesturesEnabled = showDrawer,
             drawerContent = {
                 ModalDrawerSheet {
                     if (showDrawer) {

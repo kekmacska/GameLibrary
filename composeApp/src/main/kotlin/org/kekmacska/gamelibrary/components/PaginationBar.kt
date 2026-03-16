@@ -52,7 +52,8 @@ fun PageIndicator(currentPage: Int, totalPages: Int) {
             .padding(horizontal = 16.dp)
             .padding(4.dp)
             .background(
-                color = MaterialTheme.colorScheme.primary,
+                color = MaterialTheme.colorScheme.onSecondary, //fits well: scrim, inverseOnSurface, onPrimary, onSecondary, onTertiary
+                //outline
                 shape = CircleShape
             )
             .padding(horizontal = 12.dp, vertical = 6.dp)

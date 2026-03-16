@@ -58,7 +58,7 @@ class MainActivity : ComponentActivity() {
             val currentRoute = navBackStackEntry?.destination?.route
             val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
             val showDrawer = currentRoute !in listOf("login", "register") && error == null
-            val activity = LocalActivity.current
+            LocalActivity.current
 
             Theme {
                 Surface(
@@ -181,7 +181,6 @@ class MainActivity : ComponentActivity() {
                                 Scaffold {
                                     MainScreen(
                                         navController = navController,
-                                        onBackClick = { activity?.finish() },
                                     )
                                 }
                             }

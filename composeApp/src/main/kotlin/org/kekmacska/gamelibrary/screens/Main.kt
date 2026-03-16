@@ -29,8 +29,7 @@ import org.kekmacska.gamelibrary.viewModels.MainViewModel
 @Composable
 fun MainScreen(
     navController: NavController,
-    viewModel: MainViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
-    onBackClick: () -> Unit = {}
+    viewModel: MainViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
 ) {
     val items by viewModel.games.collectAsState()
     val isGridLayout by viewModel.isGridLayout.collectAsState()

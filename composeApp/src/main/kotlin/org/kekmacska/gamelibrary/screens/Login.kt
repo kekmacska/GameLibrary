@@ -108,7 +108,8 @@ fun LoginScreen(
             Text(
                 "Not now",
                 color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.clickable { onNotNowClick() })
+                modifier = Modifier.clickable { onNotNowClick() }
+            )
         }
     }
 }
