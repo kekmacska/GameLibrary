@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import org.kekmacska.gamelibrary.providers.Validators.emailRegex
 import org.kekmacska.gamelibrary.themes.AuthScreenLayout
 import org.kekmacska.gamelibrary.themes.AuthTextField
 import org.kekmacska.gamelibrary.viewModels.AuthViewModel
@@ -40,8 +41,6 @@ fun LoginScreen(
     var password by remember { mutableStateOf("") }
     var emailError by remember { mutableStateOf("") }
     var passwordError by remember { mutableStateOf("") }
-
-    val emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$".toRegex()
 
     AuthScreenLayout(title = "Login", paddingValues = paddingValues) {
 

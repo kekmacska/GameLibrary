@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AccountCircle
+import androidx.compose.material.icons.rounded.Email
 import androidx.compose.material.icons.rounded.Lock
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
@@ -17,6 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import org.kekmacska.gamelibrary.providers.Validators.emailRegex
 import org.kekmacska.gamelibrary.themes.AuthScreenLayout
 import org.kekmacska.gamelibrary.themes.AuthTextField
 
@@ -24,8 +26,10 @@ import org.kekmacska.gamelibrary.themes.AuthTextField
 fun RegisterScreen(
     onBackClick: () -> Unit = {}
 ) {
-    var username by remember { mutableStateOf("") }
-    var usernameError by remember { mutableStateOf("") }
+    var name by remember { mutableStateOf("") }
+    var nameError by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
+    var emailError by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordError by remember { mutableStateOf("") }
     var confirm by remember { mutableStateOf("") }
@@ -34,11 +38,21 @@ fun RegisterScreen(
     AuthScreenLayout(title = "Register") {
 
         AuthTextField(
-            value = username,
-            onValueChange = { username = it },
-            label = "Username",
-            leadingIcon = { Icon(Icons.Rounded.AccountCircle, null) },
-            error = usernameError
+            value = name,
+            onValueChange = { name = it },
+            label = "Name",
+            leadingIcon = { Icon(Icons.Rounded.AccountCircle, "name") },
+            error = nameError
+        )
+
+        Spacer(Modifier.height(16.dp))
+
+        AuthTextField(
+            value = email,
+            onValueChange = {email=it},
+            label = "Email",
+            leadingIcon = {Icon(Icons.Rounded.Email, contentDescription = "email")},
+            error=emailError
         )
 
         Spacer(Modifier.height(16.dp))
@@ -47,7 +61,7 @@ fun RegisterScreen(
             value = password,
             onValueChange = { password = it },
             label = "Password",
-            leadingIcon = { Icon(Icons.Rounded.Lock, null) },
+            leadingIcon = { Icon(Icons.Rounded.Lock, "password") },
             isPassword = true,
             error = passwordError
         )
@@ -67,7 +81,12 @@ fun RegisterScreen(
 
         Button(
             onClick = {
-                usernameError = if (username.isBlank()) "Required" else ""
+                nameError = if (name.isBlank()) "Required" else ""
+                emailError = when {
+                    email.isBlank() -> "Email is required"
+                    !email.matches(emailRegex) -> "Invalid email format"
+                    else -> ""
+                }
                 passwordError = when {
                     password.isBlank() -> "Required"
                     else -> ""
