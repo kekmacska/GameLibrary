@@ -24,6 +24,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import org.kekmacska.gamelibrary.providers.Validators.emailRegex
+import org.kekmacska.gamelibrary.providers.Validators.passwordRegex
 import org.kekmacska.gamelibrary.themes.AuthScreenLayout
 import org.kekmacska.gamelibrary.themes.AuthTextField
 import org.kekmacska.gamelibrary.viewModels.AuthViewModel
@@ -73,7 +74,11 @@ fun LoginScreen(
                     !email.matches(emailRegex) -> "Invalid email format"
                     else -> ""
                 }
-                passwordError = if (password.isBlank()) "Required" else ""
+                passwordError = when {
+                    password.isBlank() -> "Password is required"
+                    !password.matches(passwordRegex)->"Password must be at least 8 characters and contain at least 1 letter"
+                    else -> ""
+                }
                 if (emailError.isNotEmpty() || passwordError.isNotEmpty()) return@Button
 
                 //login

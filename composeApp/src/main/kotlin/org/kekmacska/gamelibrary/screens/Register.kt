@@ -1,5 +1,6 @@
 package org.kekmacska.gamelibrary.screens
 
+import android.content.Context
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -17,14 +18,21 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import org.kekmacska.gamelibrary.providers.Validators.emailRegex
+import org.kekmacska.gamelibrary.providers.Validators.passwordRegex
 import org.kekmacska.gamelibrary.themes.AuthScreenLayout
 import org.kekmacska.gamelibrary.themes.AuthTextField
+import org.kekmacska.gamelibrary.viewModels.AuthViewModel
 
 @Composable
 fun RegisterScreen(
-    onBackClick: () -> Unit = {}
+    onBackClick: () -> Unit = {},
+    navController: NavController,
+    authViewModel: AuthViewModel,
+    context: Context = LocalContext.current
 ) {
     var name by remember { mutableStateOf("") }
     var nameError by remember { mutableStateOf("") }
@@ -88,14 +96,31 @@ fun RegisterScreen(
                     else -> ""
                 }
                 passwordError = when {
-                    password.isBlank() -> "Required"
+                    password.isBlank() -> "Password is required"
+                    !password.matches(passwordRegex)->""
                     else -> ""
                 }
                 confirmError = when {
-                    confirm.isBlank() -> "Required"
+                    confirm.isBlank() -> "Password confirmation is required"
                     password != confirm -> "Passwords don't match"
                     else -> ""
                 }
+
+                //register
+                authViewModel.register(
+                    context = context,
+                    name = name,
+                    email = email,
+                    password = password,
+                    onBackendErrors = { backend ->
+                        nameError = backend.name?.firstOrNull() ?: ""
+                        emailError = backend.email?.firstOrNull() ?: ""
+                        passwordError = backend.password?.firstOrNull() ?: ""
+                    },
+                    onSuccess = {
+                        navController.navigate("login")
+                    }
+                )
             },
             modifier = Modifier.fillMaxWidth()
         ) {

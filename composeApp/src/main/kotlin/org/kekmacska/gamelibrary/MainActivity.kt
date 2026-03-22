@@ -160,7 +160,10 @@ class MainActivity : ComponentActivity() {
                                                     inclusive = true
                                                 }
                                             }
-                                        }
+                                        },
+                                        navController = navController,
+                                        authViewModel = authViewModel,
+                                        context = context
                                     )
                                 }
                             }
