@@ -64,4 +64,5 @@ dependencies {
     implementation(libs.coilOkhttp)
     implementation(libs.coil)
     implementation(libs.ktorLogging)
+    implementation(libs.biometric)
 }
