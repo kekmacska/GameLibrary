@@ -2,4 +2,4 @@
 # your backend api url endpoint here
 
 # sdk.dir=/opt/android-sdk
-# API_URL=192.168.1.1:8000/api/thing
+# API_URL=http://192.168.1.1:8000/api
