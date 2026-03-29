@@ -1,7 +1,9 @@
 package org.kekmacska.gamelibrary.viewModels
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -16,26 +18,48 @@ import org.kekmacska.gamelibrary.services.login
 import org.kekmacska.gamelibrary.services.register
 
 class AuthViewModel : ViewModel() {
+
+    private val TAG = "BIOMETRIC_DEBUG"
+
     var error = mutableStateOf<String?>(null)
         private set
 
-    fun login(context: Context, email: String, password: String, onSuccess: () -> Unit) {
-        viewModelScope.launch {
-            try {
-                val response = login(email, password)
-                val success = !response.token.isNullOrBlank()
-                if (success) {
-                    //store token in secure storage
-                    val storage = TokenStorage(context)
-                    storage.saveToken(response.token)
+    private val _loginCompleted = mutableStateOf(false)
+    val loginCompleted: State<Boolean> get() = _loginCompleted
 
-                    context.saveLoggedIn()
-                    onSuccess()
+    private val _biometricEvent = mutableStateOf(false)
+    val biometricEvent: State<Boolean> get() = _biometricEvent
+
+    private var pendingAction: (() -> Unit)? = null
+
+    fun login(context: Context, email: String, password: String) {
+
+        Log.d(TAG, "login() called")
+
+        pendingAction = {
+            Log.d(TAG, "pending login executed")
+
+            viewModelScope.launch {
+                try {
+                    val response = login(email, password)
+
+                    Log.d(TAG, "login response received")
+
+                    if (!response.token.isNullOrBlank()) {
+                        TokenStorage(context).saveToken(response.token)
+                        context.saveLoggedIn()
+
+                        _loginCompleted.value = true
+                        Log.d(TAG, "LOGIN SUCCESS")
+                    }
+                } catch (e: Exception) {
+                    Log.d(TAG, "LOGIN ERROR: ${e.message}")
+                    error.value = e.message ?: "Unknown error"
                 }
-            } catch (e: Exception) {
-                error.value = e.message ?: "Unknown error"
             }
         }
+
+        triggerBiometric()
     }
 
     fun register(
@@ -46,31 +70,63 @@ class AuthViewModel : ViewModel() {
         onBackendErrors: (RegisterFieldErrors) -> Unit,
         onSuccess: () -> Unit
     ) {
-        viewModelScope.launch {
-            try {
-                when (val response = register(name, email, password)) {
-                    is RegisterResponse.Success -> {
 
-                        onBackendErrors(RegisterFieldErrors())
+        Log.d(TAG, "register() called")
 
-                        Toast.makeText(
-                            context,
-                            "Registration successful, you can now log in",
-                            Toast.LENGTH_LONG
-                        ).show()
+        pendingAction = {
+            Log.d(TAG, "pending register executed")
 
-                        onSuccess()
+            viewModelScope.launch {
+                try {
+                    when (val response = register(name, email, password)) {
+
+                        is RegisterResponse.Success -> {
+                            Log.d(TAG, "REGISTER SUCCESS")
+
+                            onBackendErrors(RegisterFieldErrors())
+
+                            Toast.makeText(
+                                context,
+                                "Registration successful",
+                                Toast.LENGTH_LONG
+                            ).show()
+
+                            onSuccess()
+                        }
+
+                        is RegisterResponse.Error -> {
+                            Log.d(TAG, "REGISTER ERROR (field validation)")
+                            onBackendErrors(response.errors)
+                        }
                     }
-
-                    is RegisterResponse.Error -> {
-                        onBackendErrors(response.errors)
-                    }
+                } catch (e: ClientRequestException) {
+                    Log.d(TAG, "REGISTER EXCEPTION: ${e.message}")
+                    val errorResponse = e.response.body<RegisterResponse.Error>()
+                    onBackendErrors(errorResponse.errors)
                 }
-
-            } catch (e: ClientRequestException) {
-                val errorResponse = e.response.body<RegisterResponse.Error>()
-                onBackendErrors(errorResponse.errors)
             }
         }
+
+        triggerBiometric()
+    }
+
+    private fun triggerBiometric() {
+        Log.d(TAG, "triggerBiometric(): false → true toggle")
+
+        _biometricEvent.value = false
+        _biometricEvent.value = true
+    }
+
+    fun runPending() {
+        Log.d(TAG, "runPending() called")
+
+        pendingAction?.invoke()
+        pendingAction = null
+
+        _biometricEvent.value = false
+    }
+
+    fun resetLoginCompleted() {
+        _loginCompleted.value = false
     }
 }

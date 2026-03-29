@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import org.kekmacska.gamelibrary.components.BiometricEffect
 import org.kekmacska.gamelibrary.providers.Validators.emailRegex
 import org.kekmacska.gamelibrary.providers.Validators.passwordRegex
 import org.kekmacska.gamelibrary.themes.AuthScreenLayout
@@ -42,6 +43,13 @@ fun RegisterScreen(
     var passwordError by remember { mutableStateOf("") }
     var confirm by remember { mutableStateOf("") }
     var confirmError by remember { mutableStateOf("") }
+
+    val biometricAction by authViewModel.biometricEvent
+
+    BiometricEffect(
+        biometricAction=biometricAction,
+        onConsumed = {authViewModel.runPending()}
+    )
 
     AuthScreenLayout(title = "Register") {
 
@@ -118,7 +126,9 @@ fun RegisterScreen(
                         passwordError = backend.password?.firstOrNull() ?: ""
                     },
                     onSuccess = {
-                        navController.navigate("login")
+                        navController.navigate("login"){
+                            popUpTo("register"){inclusive=true}
+                        }
                     }
                 )
             },
