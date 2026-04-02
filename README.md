@@ -12,12 +12,13 @@ A fully open‑source game library application for viewing information about com
 - **Material 3** with dynamic color (Monet)
 - **Backend:** The original backend uses Laravel 12
 - **Database:** The original database handled by the backend is MariaDB
+- **Launcher Icons:** AI generated from [RapidNative](https://www.rapidnative.com/tools/app-icon-generator)
 
 ### **Libraries Used**
 - **Navigation:** AndroidX Navigation Compose  
 - **Image Loading:** Coil 3 (Compose + OkHttp integration)  
 - **Networking:** Ktor Client  
-- **JSON Serialization:** KotlinX Serialization (via Ktor)  
+- **JSON Serialization:** KotlinX Serialization with polymorphic adapter (via Ktor)  
 - **Icons:** Material Icons  
 - **Environment variables:** `local.properties`  
   - Not committed to version control  
