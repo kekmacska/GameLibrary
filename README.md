@@ -1,6 +1,6 @@
 # 🎮 Game Library — Android App
 
-A fully open‑source game library application for viewing information about computer games and potentional collectibles in them, for Android, built with native Kotlin, Jetpack Compose, and Material 3 Monet dynamic theming. 
+A fully open‑source game library application for viewing information about computer games and potentional collectibles in them, for Android, built with native Kotlin, Jetpack Compose, and Material 3 Monet dynamic theming and search among the displayed games with regex support. 
 
 ---
 

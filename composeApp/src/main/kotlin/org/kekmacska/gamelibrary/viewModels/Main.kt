@@ -33,9 +33,11 @@ class MainViewModel : ViewModel() {
     val error: StateFlow<Throwable?> = _error.asStateFlow()
     private val _selectedGame = MutableStateFlow<Game?>(null)
 
-    fun clearError() {
-        _error.value = null
-    }
+    //search
+    private val _searchQuery= MutableStateFlow("")
+    val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
+    private val _searchAttribute= MutableStateFlow("name")
+    val searchAttribute: StateFlow<String> = _searchAttribute.asStateFlow()
 
     init {
         loadGames()
@@ -52,6 +54,10 @@ class MainViewModel : ViewModel() {
                 _error.value = e //update error state
             }
         }
+    }
+
+    fun clearError() {
+        _error.value = null
     }
 
     fun nextPage() {
@@ -72,7 +78,40 @@ class MainViewModel : ViewModel() {
         _selectedGame.value = game
     }
 
-    fun ToggleLayout() {
+    fun toggleLayout() {
         _isGridLayout.value = !_isGridLayout.value
     }
+
+    //search
+    fun setSearchQuery(query: String){
+        _searchQuery.value=query
+        _currentPage.value=1 //reset to first page of the search results
+    }
+
+    fun setSearchAttribute(attribute: String){
+        _searchAttribute.value=attribute
+        _currentPage.value=1
+    }
+
+    val filteredGames: StateFlow<List<Game>> = combine(_allGames,_searchQuery,_searchAttribute){games,query,attribute->
+        if(query.isBlank())return@combine games
+
+        val regex=try{
+            Regex(query, RegexOption.IGNORE_CASE)
+        }catch (_: Throwable){
+            null
+        }
+
+        games.filter { game ->
+            when(attribute){
+                "name"->regex?.containsMatchIn(game.name)?:
+                    game.name.contains(query,true)
+                "releaseYear"->regex?.containsMatchIn(game.releaseYear.toString())?:
+                    game.releaseYear.toString().contains(query)
+                "genre"->regex?.containsMatchIn(game.genre)?:
+                    game.genre.contains(query,true)
+                else->false
+            }
+        }
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000),emptyList())
 }
