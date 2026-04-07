@@ -1,4 +1,4 @@
-package org.kekmacska.gamelibrary.themes
+package org.kekmacska.gamelibrary.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth

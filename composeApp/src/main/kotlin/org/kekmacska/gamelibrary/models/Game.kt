@@ -20,5 +20,5 @@ data class Game(
     @SerialName("freetogame_url")
     val freetogameUrl: String?,
 )
-//sajnos muszáj primitíveket használni a helyes szerializáció érdekében. Csak kíráskor lehet kasztolni
-//unfortunately i need to use primitive types to achieve a successful serialization. I can only cast it when displaying it
+//sajnos muszáj primitíveket használni a helyes deszerializáció érdekében. Csak kíráskor lehet kasztolni
+//unfortunately i need to use primitive types to achieve a successful deserialization. I can only cast it when displaying it

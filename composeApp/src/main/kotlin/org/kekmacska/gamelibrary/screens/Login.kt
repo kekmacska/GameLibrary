@@ -27,8 +27,8 @@ import androidx.navigation.NavController
 import org.kekmacska.gamelibrary.components.BiometricEffect
 import org.kekmacska.gamelibrary.providers.Validators.emailRegex
 import org.kekmacska.gamelibrary.providers.Validators.passwordRegex
-import org.kekmacska.gamelibrary.themes.AuthScreenLayout
-import org.kekmacska.gamelibrary.themes.AuthTextField
+import org.kekmacska.gamelibrary.components.AuthScreenLayout
+import org.kekmacska.gamelibrary.components.AuthTextField
 import org.kekmacska.gamelibrary.viewModels.AuthViewModel
 
 @Composable

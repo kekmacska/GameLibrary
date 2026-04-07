@@ -21,6 +21,7 @@ import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import org.kekmacska.gamelibrary.BuildConfig
+import org.kekmacska.gamelibrary.models.Collectible
 import org.kekmacska.gamelibrary.models.Game
 import org.kekmacska.gamelibrary.models.LoginRequest
 import org.kekmacska.gamelibrary.models.LoginResponse
@@ -100,4 +101,8 @@ suspend fun register(name:String,email: String,password: String): RegisterRespon
         contentType(ContentType.Application.Json)
         setBody(RegisterRequest(name,email,password))
     }.body()
+}
+
+suspend fun getCollectiblesForGame(currentGame:Game):List<Collectible>{
+    return KtorClientProvider.client.get("${BuildConfig.API_URL}/games/${currentGame.id}/collectibles").body()
 }
