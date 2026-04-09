@@ -31,6 +31,7 @@ import kotlinx.coroutines.launch
 import org.kekmacska.gamelibrary.components.SideBarLeft
 import org.kekmacska.gamelibrary.preferences.isLoggedInFlow
 import org.kekmacska.gamelibrary.preferences.saveNotLoggedIn
+import org.kekmacska.gamelibrary.screens.CollectiblesScreen
 import org.kekmacska.gamelibrary.screens.GameDetails
 import org.kekmacska.gamelibrary.screens.LoginScreen
 import org.kekmacska.gamelibrary.screens.MainScreen
@@ -207,8 +208,30 @@ class MainActivity : ComponentActivity() {
                                 val game = viewModel.selectedGame.collectAsState().value
                                 if (game != null) {
                                     Scaffold {
-                                        GameDetails(game)
+                                        GameDetails(
+                                            game,
+                                            navController=navController
+                                        )
                                     }
+                                }
+                            }
+
+                            //COLLECTIBLES SCREEN
+                            composable(
+                                route="collectibles/{gameId}",
+                                enterTransition = {
+                                    scaleIn(
+                                        initialScale = .85f,
+                                        animationSpec = tween(300)
+                                    )+fadeIn(animationSpec = tween(200))
+                                },
+                                exitTransition = {
+                                    fadeOut(animationSpec = tween(200))
+                                }
+                            ){backStackEntry->
+                                val gameId=backStackEntry.arguments?.getString("gameId")!!.toInt()
+                                Scaffold {
+                                    CollectiblesScreen(gameId = gameId)
                                 }
                             }
                         }

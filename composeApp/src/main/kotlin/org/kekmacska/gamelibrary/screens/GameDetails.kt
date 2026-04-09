@@ -10,15 +10,20 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import coil3.compose.AsyncImage
 import org.kekmacska.gamelibrary.models.Game
+import org.kekmacska.gamelibrary.viewModels.CollectiblesViewmodel
 
 @Composable
 fun Table(content: @Composable () -> Unit) {
@@ -46,8 +51,17 @@ fun RowScope.Cell(content: @Composable () -> Unit) {
 }
 
 @Composable
-fun GameDetails(cardModel: Game) {
+fun GameDetails(
+    cardModel: Game,
+    navController: NavController,
+    collectiblesViewmodel: CollectiblesViewmodel= viewModel(key="collectibles-${cardModel.id}")
+) {
     val uriHandler = LocalUriHandler.current
+    LaunchedEffect(cardModel.id) {
+        collectiblesViewmodel.load(cardModel.id)
+    }
+    val collectibles=collectiblesViewmodel.collectibles
+    val error=collectiblesViewmodel.error
 
     Column(modifier = Modifier.padding(16.dp)) {
 
@@ -102,6 +116,22 @@ fun GameDetails(cardModel: Game) {
                             Text("There is no Freetogame article about this game")
                         }
                     }
+                }
+            }
+
+            Spacer(Modifier.height(16.dp))
+
+
+            if(collectibles.isNotEmpty()){
+                Button(
+                    onClick={
+                        navController.navigate("collectibles/${cardModel.id}"){
+                            popUpTo("register"){inclusive=true}
+                        }
+                    },
+                    modifier= Modifier.fillMaxWidth()
+                ){
+                    Text("View collectibles")
                 }
             }
         }

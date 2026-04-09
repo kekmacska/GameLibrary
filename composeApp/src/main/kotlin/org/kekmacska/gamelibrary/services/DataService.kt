@@ -103,6 +103,6 @@ suspend fun register(name:String,email: String,password: String): RegisterRespon
     }.body()
 }
 
-suspend fun getCollectiblesForGame(currentGame:Game):List<Collectible>{
-    return KtorClientProvider.client.get("${BuildConfig.API_URL}/games/${currentGame.id}/collectibles").body()
+suspend fun getCollectiblesForGame(gameId: Int): List<Collectible> {
+    return KtorClientProvider.client.get("${BuildConfig.API_URL}/games/$gameId/collectibles").body()
 }
