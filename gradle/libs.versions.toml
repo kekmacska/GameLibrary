@@ -1,11 +1,11 @@
 [versions]
-agp = "9.2.0-alpha07"
+agp = "9.2.0-alpha08"
 android-compileSdk = "37"
 android-minSdk = "24"
 #noinspection OldTargetApi
 android-targetSdk = "36"
 androidx-activity = "1.13.0"
-androidx-lifecycle = "2.11.0-alpha02"
+androidx-lifecycle = "2.11.0-alpha03"
 kotlin = "2.3.20"
 materialIcons = "1.7.8"
 navi = "2.9.7"
@@ -14,8 +14,9 @@ datastorePreferences = "1.3.0-alpha07"
 ktor = "3.4.2"
 coil = "3.4.0"
 biometric = "1.4.0-alpha06"
-runtime = "1.10.6"
+runtime = "1.11.0-rc01"
 appcompat = "1.7.1"
+coreKtx = "1.18.0"
 
 [libraries]
 coil = { module = "io.coil-kt.coil3:coil", version.ref = "coil" }
@@ -36,9 +37,11 @@ androidx-material3 = { group = "androidx.compose.material3", name = "material3",
 biometric={ module="androidx.biometric:biometric", version.ref="biometric" }
 androidx-runtime = { group = "androidx.compose.runtime", name = "runtime", version.ref = "runtime" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 
 [plugins]
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
 composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
