@@ -17,12 +17,9 @@ class MainViewModel : ViewModel() {
 
     private val pageSize = 9
     private val _allGames = MutableStateFlow<List<Game>>(emptyList())
+    val allGames=_allGames.asStateFlow()
     private val _currentPage = MutableStateFlow(1)
     val currentPage: StateFlow<Int> = _currentPage.asStateFlow()
-    val games: StateFlow<List<Game>> = combine(_allGames, _currentPage) { games, page ->
-        val start = (page - 1) * pageSize
-        games.drop(start).take(pageSize)
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
     val totalPages: StateFlow<Int> = _allGames.map { games ->
         if (games.isEmpty()) 1 else (games.size + pageSize - 1) / pageSize
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 1)

@@ -3,8 +3,6 @@ package org.kekmacska.gamelibrary.screens
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,34 +20,11 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil3.compose.AsyncImage
+import org.kekmacska.gamelibrary.components.Cell
+import org.kekmacska.gamelibrary.components.Table
+import org.kekmacska.gamelibrary.components.Tr
 import org.kekmacska.gamelibrary.models.Game
 import org.kekmacska.gamelibrary.viewModels.CollectiblesViewmodel
-
-@Composable
-fun Table(content: @Composable () -> Unit) {
-    Column {
-        content()
-    }
-}
-
-@Composable
-fun Tr(content: @Composable RowScope.() -> Unit) {
-    Row(Modifier.fillMaxWidth()) {
-        content()
-    }
-}
-
-@Composable
-fun RowScope.Cell(content: @Composable () -> Unit) {
-    Box(
-        modifier = Modifier
-            .weight(1f)
-            .padding(8.dp)
-    ) {
-        content()
-    }
-}
-
 @Composable
 fun GameDetails(
     cardModel: Game,
@@ -61,7 +36,6 @@ fun GameDetails(
         collectiblesViewmodel.load(cardModel.id)
     }
     val collectibles=collectiblesViewmodel.collectibles
-    val error=collectiblesViewmodel.error
 
     Column(modifier = Modifier.padding(16.dp)) {
 
@@ -98,7 +72,9 @@ fun GameDetails(
                 Cell { Text(text = "Platforms", fontWeight = FontWeight.Bold) }
                 Cell { Text(text = cardModel.platforms.joinToString(", ")) }
             }
+
             Spacer(Modifier.height(8.dp))
+
             Tr {
                 Cell {
                     Box(
@@ -120,7 +96,6 @@ fun GameDetails(
             }
 
             Spacer(Modifier.height(16.dp))
-
 
             if(collectibles.isNotEmpty()){
                 Button(

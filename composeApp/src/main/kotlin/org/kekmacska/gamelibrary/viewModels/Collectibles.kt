@@ -16,6 +16,8 @@ class CollectiblesViewmodel: ViewModel(){
         private set
     var selectedImageIdx by mutableStateOf<Int?>(null)
         private set
+    var currentCollectible by mutableStateOf<Collectible?>(null)
+        private set
 
     fun load(gameId: Int) {
         viewModelScope.launch {
@@ -23,18 +25,28 @@ class CollectiblesViewmodel: ViewModel(){
                 val result = getCollectiblesForGame(gameId)
                 collectibles = result
                 error = false
+                currentCollectible=result.firstOrNull()
+                selectedImageIdx=null
             } catch (_: Exception) {
                 collectibles = emptyList()
                 error = true
+                currentCollectible=null
+                selectedImageIdx=null
             }
         }
     }
 
-    fun openImage(idx: Int){
+    fun openImage(collectible: Collectible,idx: Int){
+        currentCollectible=collectible
         selectedImageIdx=idx
     }
 
     fun closeImage(){
         selectedImageIdx=null
+    }
+
+    fun selectCollectible(idx:Int){
+        currentCollectible=collectibles.getOrNull(idx)
+        selectedImageIdx=idx
     }
 }
