@@ -33,7 +33,7 @@ fun MainScreen(
     navController: NavController,
     viewModel: MainViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
 ) {
-    val items by viewModel.filteredGames.collectAsState() //support filtering
+    val items by viewModel.paginatedGames.collectAsState() //support filtering and paginating
     val isGridLayout by viewModel.isGridLayout.collectAsState()
     val error by viewModel.error.collectAsState()
     val currentPage by viewModel.currentPage.collectAsState()
