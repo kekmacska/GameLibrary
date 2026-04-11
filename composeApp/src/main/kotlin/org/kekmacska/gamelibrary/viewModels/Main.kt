@@ -17,6 +17,8 @@ import kotlin.collections.emptyList
 class MainViewModel : ViewModel() {
     private val gridPageSize=9
     private val listPageSize=5
+    private val _isLoading= MutableStateFlow(true)
+    val isLoading=_isLoading.asStateFlow()
     private val _allGames = MutableStateFlow<List<Game>>(emptyList())
     val allGames = _allGames.asStateFlow()
 
@@ -73,6 +75,7 @@ class MainViewModel : ViewModel() {
 
     fun loadGames() {
         viewModelScope.launch {
+            _isLoading.value=true
             try {
                 val allGames = getAllGames().shuffled()
                 _allGames.value = allGames
@@ -80,6 +83,8 @@ class MainViewModel : ViewModel() {
                 _error.value = null
             } catch (e: Throwable) {
                 _error.value = e
+            }finally {
+                _isLoading.value=false
             }
         }
     }

@@ -14,10 +14,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import coil3.compose.AsyncImage
+import org.kekmacska.gamelibrary.components.shimmer.ShimmerAsyncImage
 import org.kekmacska.gamelibrary.models.Game
 
 @Composable
@@ -30,13 +29,12 @@ fun GameListComponent(cardModel: Game, onClick: (Int) -> Unit) {
             .clickable { onClick(cardModel.id) },
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        AsyncImage(
+        ShimmerAsyncImage(
             model = cardModel.cover,
-            contentDescription = null,
+            contentDescription = cardModel.name,
             modifier = Modifier
                 .size(80.dp)
-                .fillMaxHeight(),
-            contentScale = ContentScale.Crop
+                .fillMaxHeight()
         )
 
         Column(

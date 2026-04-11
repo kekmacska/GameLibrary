@@ -10,6 +10,8 @@ import org.kekmacska.gamelibrary.models.Collectible
 import org.kekmacska.gamelibrary.services.getCollectiblesForGame
 
 class CollectiblesViewmodel: ViewModel(){
+    var isLoading by mutableStateOf(true)
+        private set
     var collectibles by mutableStateOf<List<Collectible>>(emptyList())
         private set
     var error by mutableStateOf(false)
@@ -21,6 +23,7 @@ class CollectiblesViewmodel: ViewModel(){
 
     fun load(gameId: Int) {
         viewModelScope.launch {
+            isLoading=true
             try {
                 val result = getCollectiblesForGame(gameId)
                 collectibles = result
@@ -31,6 +34,9 @@ class CollectiblesViewmodel: ViewModel(){
                 collectibles = emptyList()
                 error = true
                 currentCollectible=null
+                selectedImageIdx=null
+            }finally {
+                isLoading=false
                 selectedImageIdx=null
             }
         }

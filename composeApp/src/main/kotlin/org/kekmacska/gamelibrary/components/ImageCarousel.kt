@@ -19,43 +19,52 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
-import coil3.compose.AsyncImage
+import org.kekmacska.gamelibrary.components.shimmer.ShimmerAsyncImage
 
 @Composable
 fun ImageCarousel(
     images: List<String>, //urls
-    pagerState: PagerState= rememberPagerState(pageCount = {images.size}),
-    onImageClick:(Int)->Unit
-){
-    Box(modifier= Modifier.fillMaxWidth().height(220.dp)){
+    pagerState: PagerState = rememberPagerState(pageCount = { images.size }),
+    onImageClick: (Int) -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(220.dp)
+    ) {
         HorizontalPager(
             state = pagerState,
             modifier = Modifier.fillMaxSize()
-        ) {page->
-            AsyncImage(
-                model=images[page],
-                contentDescription = null,
-                modifier = Modifier.fillMaxSize().clickable{onImageClick(page)}
+        ) { page ->
+            ShimmerAsyncImage(
+                model = images[page],
+                contentDescription = "Carousel image $page",
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clickable { onImageClick(page) }
             )
         }
+
         Row(
-            modifier= Modifier.align(Alignment.BottomCenter).padding(8.dp),
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(8.dp),
             horizontalArrangement = Arrangement.spacedBy(6.dp)
-        ){
-            repeat(images.size){idx->
-                val selected=pagerState.currentPage==idx
+        ) {
+            repeat(images.size) { idx ->
+                val selected = pagerState.currentPage == idx
 
                 Box(
                     modifier = Modifier
-                        .size(if(selected)10.dp else 6.dp)
+                        .size(if (selected) 10.dp else 6.dp)
                         .padding(1.dp)
-                        .graphicsLayer{alpha=if(selected)1f else .4f}
-                ){
+                        .graphicsLayer { alpha = if (selected) 1f else 0.4f }
+                ) {
                     Surface(
-                        shape= MaterialTheme.shapes.small,
+                        shape = MaterialTheme.shapes.small,
                         color = MaterialTheme.colorScheme.primary,
-                        modifier= Modifier.fillMaxSize()
-                    ){}
+                        modifier = Modifier.fillMaxSize()
+                    ) {}
                 }
             }
         }

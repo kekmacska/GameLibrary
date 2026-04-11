@@ -23,6 +23,7 @@ import coil3.compose.AsyncImage
 import org.kekmacska.gamelibrary.components.Cell
 import org.kekmacska.gamelibrary.components.Table
 import org.kekmacska.gamelibrary.components.Tr
+import org.kekmacska.gamelibrary.components.shimmer.ShimmerCollectiblesButtonPlaceholder
 import org.kekmacska.gamelibrary.models.Game
 import org.kekmacska.gamelibrary.viewModels.CollectiblesViewmodel
 @Composable
@@ -97,18 +98,25 @@ fun GameDetails(
 
             Spacer(Modifier.height(16.dp))
 
-            if(collectibles.isNotEmpty()){
-                Button(
-                    onClick={
-                        navController.navigate("collectibles/${cardModel.id}"){
-                            popUpTo("register"){inclusive=true}
-                        }
-                    },
-                    modifier= Modifier.fillMaxWidth()
-                ){
-                    Text("View collectibles")
+            when {
+                collectiblesViewmodel.isLoading -> {
+                    ShimmerCollectiblesButtonPlaceholder()
+                }
+
+                collectibles.isNotEmpty() -> {
+                    Button(
+                        onClick = {
+                            navController.navigate("collectibles/${cardModel.id}") {
+                                popUpTo("register") { inclusive = true }
+                            }
+                        },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text("View collectibles")
+                    }
                 }
             }
+
         }
     }
 }
