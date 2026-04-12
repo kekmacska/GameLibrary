@@ -10,7 +10,9 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import org.kekmacska.gamelibrary.BuildConfig
 import org.kekmacska.gamelibrary.models.Game
+import org.kekmacska.gamelibrary.providers.Validators.isValidCustomApiUrl
 import org.kekmacska.gamelibrary.services.getAllGames
 import kotlin.collections.emptyList
 
@@ -73,11 +75,23 @@ class MainViewModel : ViewModel() {
         loadGames()
     }
 
-    fun loadGames() {
+    private fun resolveBaseUrl(customUrl: String?): String {
+        val trimmed = customUrl?.trim().orEmpty()
+        val urlToUse = if (trimmed.isNotEmpty() && isValidCustomApiUrl(trimmed)) {
+            trimmed
+        } else {
+            BuildConfig.API_URL
+        }
+
+        return if (urlToUse.endsWith("/")) urlToUse else "$urlToUse/"
+    }
+
+    fun loadGames(customUrl:String?=null) {
         viewModelScope.launch {
             _isLoading.value=true
             try {
-                val allGames = getAllGames().shuffled()
+                val baseUrl=resolveBaseUrl(customUrl)
+                val allGames = getAllGames(baseUrl).shuffled()
                 _allGames.value = allGames
                 _currentPage.value = 1
                 _error.value = null

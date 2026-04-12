@@ -1,6 +1,5 @@
 package org.kekmacska.gamelibrary.screens
 
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,6 +19,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -28,20 +28,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.text.TextLayoutResult
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import org.kekmacska.gamelibrary.components.GithubIssues
 import org.kekmacska.gamelibrary.providers.ClipboardProvider
+import org.kekmacska.gamelibrary.providers.Validators.isValidCustomApiUrl
 
 @Composable
-fun ErrorScreen(exception: Throwable?, onRetry: () -> Unit) {
+fun ErrorScreen(exception: Throwable?, onRetry: (String?) -> Unit) {
     val trace = exception?.stackTraceToString() ?: "Unknown error"
 
     Column(
@@ -97,49 +94,41 @@ fun ErrorScreen(exception: Throwable?, onRetry: () -> Unit) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Button(onClick = onRetry) {
+        //retry with custom url
+        var customApiUrl by remember { mutableStateOf("") }
+        var isValidUrl by remember { mutableStateOf(true) }
+
+        OutlinedTextField(
+            value = customApiUrl,
+            onValueChange = {
+                customApiUrl=it
+                isValidUrl=isValidCustomApiUrl(it)
+            },
+            label={Text("Retry with specified custom API endpoint")},
+            singleLine = true,
+            isError = !isValidUrl,
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        if(!isValidUrl){
+            Text(
+                text = "Invalid URL (must be http/https and should be a base URL of the endpoints",
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodySmall
+            )
+        }
+
+        Button(
+            onClick = {
+                if(customApiUrl.isNotEmpty()&&isValidUrl){
+                    onRetry(customApiUrl)
+                }else{
+                    onRetry(null)
+                }
+            },
+            enabled = isValidUrl
+        ) {
             Text(text = "Retry", textAlign = TextAlign.Center)
         }
     }
-}
-
-
-@Composable
-fun GithubIssues(issuesUrl: String) {
-    val uriHandler = LocalUriHandler.current
-    val annotated = buildAnnotatedString {
-        append("Please check your internet connection. If you suspect this is a bug or a service outage, please report it with the copied stack trace in ")
-        pushStringAnnotation(tag = "issues", annotation = issuesUrl)
-        withStyle(
-            MaterialTheme.typography.bodySmall.toSpanStyle().copy(
-                color = MaterialTheme.colorScheme.primary
-            )
-        ) {
-            append("github issues")
-        }
-        pop()
-        append(". Thank you!")
-    }
-
-    var layoutResult by remember { mutableStateOf<TextLayoutResult?>(null) }
-
-    Text(
-        text = annotated,
-        style = MaterialTheme.typography.bodySmall,
-        textAlign = TextAlign.Center,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-            .pointerInput(Unit) {
-                detectTapGestures { offset ->
-                    val layout = layoutResult ?: return@detectTapGestures
-                    val pos = layout.getOffsetForPosition(offset)
-                    annotated
-                        .getStringAnnotations("issues", pos, pos)
-                        .firstOrNull()
-                        ?.let { uriHandler.openUri(it.item) }
-                }
-            },
-        onTextLayout = { layoutResult = it }
-    )
 }

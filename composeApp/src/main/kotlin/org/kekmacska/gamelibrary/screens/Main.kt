@@ -116,8 +116,8 @@ fun MainScreen(
             }
         }
     } else {
-        ErrorScreen(error) {
-            viewModel.loadGames()
+        ErrorScreen(error) {customUrl ->
+            viewModel.loadGames(customUrl)
             viewModel.clearError()
         }
     }

@@ -85,8 +85,9 @@ object RegisterResponseSerializer :
     }
 }
 
-suspend fun getAllGames(): List<Game> {
-    return KtorClientProvider.client.get("${BuildConfig.API_URL}/games").body()
+suspend fun getAllGames(baseUrl: String = BuildConfig.API_URL): List<Game> {
+    val url = if (baseUrl.endsWith("/")) "${baseUrl}games" else "$baseUrl/games"
+    return KtorClientProvider.client.get(url).body()
 }
 
 suspend fun login(email: String, password: String): LoginResponse {
