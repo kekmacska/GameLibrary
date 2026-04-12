@@ -1,6 +1,7 @@
 package org.kekmacska.gamelibrary.viewModels
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -11,18 +12,21 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.kekmacska.gamelibrary.BuildConfig
+import org.kekmacska.gamelibrary.cache.PublisherCache
 import org.kekmacska.gamelibrary.models.Game
 import org.kekmacska.gamelibrary.providers.Validators.isValidCustomApiUrl
 import org.kekmacska.gamelibrary.services.getAllGames
-import kotlin.collections.emptyList
+import org.kekmacska.gamelibrary.services.getPublisherById
 
-class MainViewModel : ViewModel() {
+class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val gridPageSize=9
     private val listPageSize=5
     private val _isLoading= MutableStateFlow(true)
     val isLoading=_isLoading.asStateFlow()
     private val _allGames = MutableStateFlow<List<Game>>(emptyList())
     val allGames = _allGames.asStateFlow()
+    private val publisherCache= PublisherCache(application.applicationContext)
+    private val gamePublisherNames=mutableMapOf<Int, String>()
 
     private val _currentPage = MutableStateFlow(1)
     val currentPage: StateFlow<Int> = _currentPage.asStateFlow()
@@ -37,7 +41,6 @@ class MainViewModel : ViewModel() {
     // search
     private val _searchQuery = MutableStateFlow("")
     val searchQuery = _searchQuery.asStateFlow()
-
     private val _searchAttribute = MutableStateFlow("name")
     val searchAttribute = _searchAttribute.asStateFlow()
     val filteredGames: StateFlow<List<Game>> =
@@ -56,6 +59,12 @@ class MainViewModel : ViewModel() {
 
                     "genre" -> regex?.containsMatchIn(game.genre)
                         ?: game.genre.contains(query, true)
+
+                    "publisher" -> {
+                        val publisherName=gamePublisherNames[game.publisherId].orEmpty()
+                        regex?.containsMatchIn(publisherName)
+                            ?: publisherName.contains(query,true)
+                    }
 
                     else -> false
                 }
@@ -86,19 +95,31 @@ class MainViewModel : ViewModel() {
         return if (urlToUse.endsWith("/")) urlToUse else "$urlToUse/"
     }
 
-    fun loadGames(customUrl:String?=null) {
+    fun loadGames(customUrl: String? = null) {
         viewModelScope.launch {
-            _isLoading.value=true
+            _isLoading.value = true
             try {
-                val baseUrl=resolveBaseUrl(customUrl)
-                val allGames = getAllGames(baseUrl).shuffled()
-                _allGames.value = allGames
+                val baseUrl = resolveBaseUrl(customUrl)
+                val allGamesList = getAllGames(baseUrl).shuffled()
+                _allGames.value = allGamesList
                 _currentPage.value = 1
                 _error.value = null
+
+                //preload unique publishers
+                val uniquePublisherIds = allGamesList.map { it.publisherId }.distinct()
+
+                uniquePublisherIds.forEach { id ->
+                    val publisher = publisherCache.getPublisher(id) //try getting publishers from cache
+                        //then from network
+                        ?: getPublisherById(id, getApplication())
+
+                    gamePublisherNames[id] = publisher.name
+                }
+
             } catch (e: Throwable) {
                 _error.value = e
-            }finally {
-                _isLoading.value=false
+            } finally {
+                _isLoading.value = false
             }
         }
     }

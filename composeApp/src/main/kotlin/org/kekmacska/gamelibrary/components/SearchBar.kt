@@ -40,7 +40,7 @@ import org.kekmacska.gamelibrary.viewModels.MainViewModel
 fun SearchBar(viewModel: MainViewModel) {
     val searchQuery by viewModel.searchQuery.collectAsState()
     val searchAttribute by viewModel.searchAttribute.collectAsState()
-    val attributes = listOf("name", "releaseYear", "genre")
+    val attributes = listOf("name", "releaseYear", "genre", "publisher")
 
     var menuWidth by remember { mutableIntStateOf(0) }
     var expanded by remember { mutableStateOf(false) }
