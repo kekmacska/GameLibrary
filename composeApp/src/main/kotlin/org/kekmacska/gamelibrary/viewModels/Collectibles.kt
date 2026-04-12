@@ -53,6 +53,6 @@ class CollectiblesViewmodel: ViewModel(){
 
     fun selectCollectible(idx:Int){
         currentCollectible=collectibles.getOrNull(idx)
-        selectedImageIdx=idx
+        selectedImageIdx=null
     }
 }

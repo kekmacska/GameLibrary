@@ -22,7 +22,7 @@ fun ShimmerAsyncImage(
     contentDescription: String? = null,
 ) {
     val shimmer = rememberShimmer(shimmerBounds = ShimmerBounds.View)
-    var isLoaded by remember { mutableStateOf(false) }
+    var isLoaded by remember(model) { mutableStateOf(false) }
 
     Box(modifier = modifier) {
         if (!isLoaded) {

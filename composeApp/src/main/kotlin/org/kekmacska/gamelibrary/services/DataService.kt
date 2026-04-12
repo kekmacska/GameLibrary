@@ -1,5 +1,6 @@
 package org.kekmacska.gamelibrary.services
 
+import android.content.Context
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.okhttp.OkHttp
@@ -21,10 +22,12 @@ import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import org.kekmacska.gamelibrary.BuildConfig
+import org.kekmacska.gamelibrary.cache.PublisherCache
 import org.kekmacska.gamelibrary.models.Collectible
 import org.kekmacska.gamelibrary.models.Game
 import org.kekmacska.gamelibrary.models.LoginRequest
 import org.kekmacska.gamelibrary.models.LoginResponse
+import org.kekmacska.gamelibrary.models.Publisher
 import org.kekmacska.gamelibrary.models.RegisterRequest
 import org.kekmacska.gamelibrary.models.RegisterResponse
 
@@ -106,4 +109,16 @@ suspend fun register(name:String,email: String,password: String): RegisterRespon
 
 suspend fun getCollectiblesForGame(gameId: Int): List<Collectible> {
     return KtorClientProvider.client.get("${BuildConfig.API_URL}/games/$gameId/collectibles").body()
+}
+
+suspend fun getPublisherById(
+    publisherId:Int,context: Context,baseUrl: String = BuildConfig.API_URL
+): Publisher {
+    val cache= PublisherCache(context)
+    cache.getPublisher(publisherId)?.let{return it}
+    val publisher: Publisher=
+        KtorClientProvider.client.get("${baseUrl}/publishers/$publisherId").body()
+    cache.savePublisher(publisher)
+
+    return publisher
 }

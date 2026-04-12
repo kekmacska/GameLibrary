@@ -12,8 +12,13 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -24,24 +29,33 @@ import org.kekmacska.gamelibrary.components.Cell
 import org.kekmacska.gamelibrary.components.Table
 import org.kekmacska.gamelibrary.components.Tr
 import org.kekmacska.gamelibrary.components.shimmer.ShimmerCollectiblesButtonPlaceholder
+import org.kekmacska.gamelibrary.components.shimmer.ShimmerText
 import org.kekmacska.gamelibrary.models.Game
+import org.kekmacska.gamelibrary.models.Publisher
+import org.kekmacska.gamelibrary.services.getPublisherById
 import org.kekmacska.gamelibrary.viewModels.CollectiblesViewmodel
 @Composable
 fun GameDetails(
-    cardModel: Game,
+    game: Game,
     navController: NavController,
-    collectiblesViewmodel: CollectiblesViewmodel= viewModel(key="collectibles-${cardModel.id}")
+    collectiblesViewmodel: CollectiblesViewmodel= viewModel(key="collectibles-${game.id}")
 ) {
+    val context= LocalContext.current
     val uriHandler = LocalUriHandler.current
-    LaunchedEffect(cardModel.id) {
-        collectiblesViewmodel.load(cardModel.id)
+    var publisher by remember { mutableStateOf<Publisher?>(null) }
+    LaunchedEffect(game.id) {
+        collectiblesViewmodel.load(game.id)
+    }
+    LaunchedEffect(game.publisherId) {
+        publisher= getPublisherById(game.publisherId,context)
     }
     val collectibles=collectiblesViewmodel.collectibles
+
 
     Column(modifier = Modifier.padding(16.dp)) {
 
         AsyncImage(
-            model = cardModel.cover,
+            model = game.cover,
             contentDescription = null,
             modifier = Modifier
                 .fillMaxWidth()
@@ -55,23 +69,23 @@ fun GameDetails(
         Table {
             Tr {
                 Cell { Text(text = "Name", fontWeight = FontWeight.Bold) }
-                Cell { Text(text = cardModel.name) }
+                Cell { Text(text = game.name) }
             }
             Tr {
                 Cell { Text(text = "Release year", fontWeight = FontWeight.Bold) }
-                Cell { Text(text = cardModel.releaseYear.toString()) }
+                Cell { Text(text = game.releaseYear.toString()) }
             }
             Tr {
                 Cell { Text(text = "Genre", fontWeight = FontWeight.Bold) }
-                Cell { Text(text = cardModel.genre) }
+                Cell { Text(text = game.genre) }
             }
             Tr {
                 Cell { Text(text = "Publisher", fontWeight = FontWeight.Bold) }
-                Cell { Text(text = cardModel.publisherId.toString()) }
+                Cell { ShimmerText(text = publisher?.name, width = 120.dp, height = 20.dp) }
             }
             Tr {
                 Cell { Text(text = "Platforms", fontWeight = FontWeight.Bold) }
-                Cell { Text(text = cardModel.platforms.joinToString(", ")) }
+                Cell { Text(text = game.platforms.joinToString(", ")) }
             }
 
             Spacer(Modifier.height(8.dp))
@@ -82,11 +96,11 @@ fun GameDetails(
                         modifier = Modifier.fillMaxWidth(),
                         contentAlignment = androidx.compose.ui.Alignment.Center
                     ) {
-                        if (!cardModel.freetogameUrl.isNullOrEmpty()) {
+                        if (!game.freetogameUrl.isNullOrEmpty()) {
                             Text(
                                 text = "Freetogame link",
                                 modifier = Modifier.clickable {
-                                    uriHandler.openUri(cardModel.freetogameUrl)
+                                    uriHandler.openUri(game.freetogameUrl)
                                 }
                             )
                         } else {
@@ -106,7 +120,7 @@ fun GameDetails(
                 collectibles.isNotEmpty() -> {
                     Button(
                         onClick = {
-                            navController.navigate("collectibles/${cardModel.id}") {
+                            navController.navigate("collectibles/${game.id}") {
                                 popUpTo("register") { inclusive = true }
                             }
                         },

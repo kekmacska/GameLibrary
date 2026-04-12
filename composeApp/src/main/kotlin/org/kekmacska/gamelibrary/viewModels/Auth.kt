@@ -12,7 +12,7 @@ import io.ktor.client.plugins.ClientRequestException
 import kotlinx.coroutines.launch
 import org.kekmacska.gamelibrary.models.RegisterFieldErrors
 import org.kekmacska.gamelibrary.models.RegisterResponse
-import org.kekmacska.gamelibrary.preferences.TokenStorage
+import org.kekmacska.gamelibrary.cache.TokenStorage
 import org.kekmacska.gamelibrary.preferences.saveLoggedIn
 import org.kekmacska.gamelibrary.services.login
 import org.kekmacska.gamelibrary.services.register

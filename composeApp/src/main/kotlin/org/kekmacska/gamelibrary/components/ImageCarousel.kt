@@ -11,10 +11,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
@@ -24,9 +24,12 @@ import org.kekmacska.gamelibrary.components.shimmer.ShimmerAsyncImage
 @Composable
 fun ImageCarousel(
     images: List<String>, //urls
-    pagerState: PagerState = rememberPagerState(pageCount = { images.size }),
     onImageClick: (Int) -> Unit
 ) {
+    val pagerState= remember(images){
+        PagerState(pageCount = {images.size})
+    }
+
     Box(
         modifier = Modifier
             .fillMaxWidth()

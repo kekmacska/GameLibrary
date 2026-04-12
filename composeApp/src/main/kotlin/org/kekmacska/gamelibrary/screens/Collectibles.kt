@@ -16,7 +16,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import org.kekmacska.gamelibrary.components.Cell
@@ -25,6 +24,7 @@ import org.kekmacska.gamelibrary.components.ImageCarousel
 import org.kekmacska.gamelibrary.components.PaginationBar
 import org.kekmacska.gamelibrary.components.Table
 import org.kekmacska.gamelibrary.components.Tr
+import org.kekmacska.gamelibrary.components.shimmer.ShimmerText
 import org.kekmacska.gamelibrary.viewModels.CollectiblesViewmodel
 import org.kekmacska.gamelibrary.viewModels.MainViewModel
 
@@ -53,11 +53,10 @@ fun CollectiblesScreen(
                 .fillMaxSize()
                 .blur(if (isFullScreen) 20.dp else 0.dp)
         ) {
-            Text(
-                text = "${currentGame?.name ?: ""}'s collectibles",
-                style = MaterialTheme.typography.headlineMedium,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
+            ShimmerText(
+                text = currentGame?.name?.let { "$it's collectibles" },
+                style=MaterialTheme.typography.headlineMedium,
+                modifier= Modifier
                     .fillMaxWidth()
                     .padding(start = 16.dp, end = 16.dp, top = 24.dp, bottom = 10.dp)
             )
@@ -65,7 +64,6 @@ fun CollectiblesScreen(
             if (currentCollectibleImages.isNotEmpty()) {
                 ImageCarousel(
                     images = currentCollectibleImages,
-                    pagerState = pagerState,
                     onImageClick = { idx ->
                         currentCollectible?.let{
                             collectiblesViewmodel.openImage(it,idx)

@@ -1,4 +1,4 @@
-package org.kekmacska.gamelibrary.preferences
+package org.kekmacska.gamelibrary.cache
 
 import android.content.Context
 import android.security.keystore.KeyGenParameterSpec

@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import kotlinx.coroutines.launch
-import org.kekmacska.gamelibrary.preferences.TokenStorage
+import org.kekmacska.gamelibrary.cache.TokenStorage
 import org.kekmacska.gamelibrary.preferences.isLoggedInFlow
 import org.kekmacska.gamelibrary.preferences.saveNotLoggedIn
 
