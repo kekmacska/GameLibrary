@@ -6,44 +6,44 @@ android-minSdk = "24"
 android-targetSdk = "36"
 androidx-activity = "1.13.0"
 androidx-lifecycle = "2.11.0-alpha03"
+appcompat = "1.7.1"
+biometric = "1.4.0-alpha06"
+coil = "3.4.0"
+coreKtx = "1.18.0"
+datastorePreferences = "1.3.0-alpha07"
 kotlin = "2.3.20"
+ktor = "3.4.2"
+material3 = "1.5.0-alpha17"
 materialIcons = "1.7.8"
 navi = "2.9.7"
-material3 = "1.5.0-alpha17"
-datastorePreferences = "1.3.0-alpha07"
-ktor = "3.4.2"
-coil = "3.4.0"
-biometric = "1.4.0-alpha06"
 runtime = "1.11.0-rc01"
-appcompat = "1.7.1"
-coreKtx = "1.18.0"
-shimmer="1.3.3"
+shimmer = "1.3.3"
 
 [libraries]
-shimmer = {module="com.valentinilk.shimmer:compose-shimmer",version.ref="shimmer"}
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-lifecycle-runtimeCompose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
+androidx-lifecycle-viewmodelCompose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "androidx-lifecycle" }
+androidx-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
+androidx-runtime = { group = "androidx.compose.runtime", name = "runtime", version.ref = "runtime" }
+biometric = { module = "androidx.biometric:biometric", version.ref = "biometric" }
 coil = { module = "io.coil-kt.coil3:coil", version.ref = "coil" }
 coilCompose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
 coilOkhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coil" }
-ktorCore = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
-ktorOkhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
-ktorLogging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
-ktorClientNegotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
-ktorSerializationJson = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
 datastorePreferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
-navi = { module = "androidx.navigation:navigation-compose", version.ref = "navi" }
+ktorClientNegotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
+ktorCore = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
+ktorLogging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
+ktorOkhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
+ktorSerializationJson = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
 materialIcons = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIcons" }
-androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
-androidx-lifecycle-viewmodelCompose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "androidx-lifecycle" }
-androidx-lifecycle-runtimeCompose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
-androidx-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
-biometric={ module="androidx.biometric:biometric", version.ref="biometric" }
-androidx-runtime = { group = "androidx.compose.runtime", name = "runtime", version.ref = "runtime" }
-androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
-androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+navi = { module = "androidx.navigation:navigation-compose", version.ref = "navi" }
+shimmer = { module = "com.valentinilk.shimmer:compose-shimmer", version.ref = "shimmer" }
 
 [plugins]
-kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
 composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

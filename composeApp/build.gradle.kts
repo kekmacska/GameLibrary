@@ -50,25 +50,37 @@ android {
 }
 
 dependencies {
-    implementation(libs.shimmer)
+    //AndroidX Core
+    implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.material3)
-    implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.lifecycle.viewmodelCompose)
-    implementation(libs.androidx.lifecycle.runtimeCompose)
 
+    //Compose UI
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.lifecycle.runtimeCompose)
+    implementation(libs.androidx.lifecycle.viewmodelCompose)
+    implementation(libs.androidx.material3)
+    implementation(libs.androidx.runtime)
     implementation(libs.materialIcons)
+
+    //Navigation
     implementation(libs.navi)
+
+    //Storage
     implementation(libs.datastorePreferences)
-    implementation(libs.ktorCore)
-    implementation(libs.ktorOkhttp)
+
+    //Ktor
     implementation(libs.ktorClientNegotiation)
+    implementation(libs.ktorCore)
+    implementation(libs.ktorLogging)
+    implementation(libs.ktorOkhttp)
     implementation(libs.ktorSerializationJson)
+
+    //Coil
+    implementation(libs.coil)
     implementation(libs.coilCompose)
     implementation(libs.coilOkhttp)
-    implementation(libs.coil)
-    implementation(libs.ktorLogging)
+
     implementation(libs.biometric)
-    implementation(libs.androidx.runtime)
-    implementation(libs.androidx.appcompat)
+
+    implementation(libs.shimmer)
 }
