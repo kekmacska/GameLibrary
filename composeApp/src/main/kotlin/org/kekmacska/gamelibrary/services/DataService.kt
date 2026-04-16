@@ -100,10 +100,15 @@ suspend fun login(email: String, password: String): LoginResponse {
     }.body()
 }
 
-suspend fun register(name:String,email: String,password: String): RegisterResponse{
-    return KtorClientProvider.client.post("${BuildConfig.API_URL}/register"){
+suspend fun register(name: String, email: String, password: String): RegisterResponse {
+    return KtorClientProvider.client.post("${BuildConfig.API_URL}/register") {
         contentType(ContentType.Application.Json)
-        setBody(RegisterRequest(name,email,password))
+        setBody(RegisterRequest(
+            name = name,
+            email = email,
+            password = password,
+            passwordConfirmation = password
+        ))
     }.body()
 }
 

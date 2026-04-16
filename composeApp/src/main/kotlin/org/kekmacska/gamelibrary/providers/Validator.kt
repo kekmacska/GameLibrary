@@ -4,7 +4,7 @@ import androidx.core.net.toUri
 
 object Validators{
     val emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$".toRegex()
-    val passwordRegex = """^(?=.*[A-Za-z]).{8,}$""".toRegex()
+    val passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*(),.?\":{}|<>]).{8,}$".toRegex()
 
     fun isValidCustomApiUrl(url: String): Boolean{
         return try {

@@ -97,40 +97,47 @@ fun RegisterScreen(
 
         Button(
             onClick = {
-                nameError = if (name.isBlank()) "Required" else ""
-                emailError = when {
+                val nameErr = if (name.isBlank()) "Required" else ""
+                val emailErr = when {
                     email.isBlank() -> "Email is required"
                     !email.matches(emailRegex) -> "Invalid email format"
                     else -> ""
                 }
-                passwordError = when {
+                val passwordErr = when {
                     password.isBlank() -> "Password is required"
-                    !password.matches(passwordRegex)->""
+                    !password.matches(passwordRegex)->"Password format is invalid"
                     else -> ""
                 }
-                confirmError = when {
+                val confirmErr = when {
                     confirm.isBlank() -> "Password confirmation is required"
-                    password != confirm -> "Passwords don't match"
+                    password.trim() != confirm.trim() -> "Passwords don't match"
                     else -> ""
                 }
 
+                nameError = nameErr
+                emailError = emailErr
+                passwordError = passwordErr
+                confirmError = confirmErr
+
                 //register
-                authViewModel.register(
-                    context = context,
-                    name = name,
-                    email = email,
-                    password = password,
-                    onBackendErrors = { backend ->
-                        nameError = backend.name?.firstOrNull() ?: ""
-                        emailError = backend.email?.firstOrNull() ?: ""
-                        passwordError = backend.password?.firstOrNull() ?: ""
-                    },
-                    onSuccess = {
-                        navController.navigate("login"){
-                            popUpTo("register"){inclusive=true}
+                if(nameErr.isEmpty()&&emailErr.isEmpty()&&passwordErr.isEmpty()&&confirmErr.isEmpty()){
+                    authViewModel.register(
+                        context = context,
+                        name = name,
+                        email = email,
+                        password = password,
+                        onBackendErrors = { backend ->
+                            nameError = backend.name?.firstOrNull() ?: ""
+                            emailError = backend.email?.firstOrNull() ?: ""
+                            passwordError = backend.password?.firstOrNull() ?: ""
+                        },
+                        onSuccess = {
+                            navController.navigate("login"){
+                                popUpTo("register"){inclusive=true}
+                            }
                         }
-                    }
-                )
+                    )
+                }
             },
             modifier = Modifier.fillMaxWidth()
         ) {

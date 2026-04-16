@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -38,6 +40,7 @@ fun CollectiblesScreen(
         collectiblesViewmodel.load(gameId)
     }
 
+    val scrollState= rememberScrollState()
     val currentCollectible=collectiblesViewmodel.currentCollectible
     val collectibles=collectiblesViewmodel.collectibles
     val currentGame = mainViewModel.allGames.collectAsState().value.find { it.id == gameId }
@@ -52,6 +55,7 @@ fun CollectiblesScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .blur(if (isFullScreen) 20.dp else 0.dp)
+                .verticalScroll(scrollState)
         ) {
             ShimmerText(
                 text = currentGame?.name?.let { "$it's collectibles" },

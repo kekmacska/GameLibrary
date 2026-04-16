@@ -33,12 +33,7 @@ class AuthViewModel : ViewModel() {
     private var pendingAction: (() -> Unit)? = null
 
     fun login(context: Context, email: String, password: String) {
-
-        Log.d(TAG, "login() called")
-
         pendingAction = {
-            Log.d(TAG, "pending login executed")
-
             viewModelScope.launch {
                 try {
                     val response = login(email, password)
@@ -71,17 +66,12 @@ class AuthViewModel : ViewModel() {
         onSuccess: () -> Unit
     ) {
 
-        Log.d(TAG, "register() called")
-
         pendingAction = {
-            Log.d(TAG, "pending register executed")
-
             viewModelScope.launch {
                 try {
                     when (val response = register(name, email, password)) {
 
                         is RegisterResponse.Success -> {
-                            Log.d(TAG, "REGISTER SUCCESS")
 
                             onBackendErrors(RegisterFieldErrors())
 
@@ -111,18 +101,13 @@ class AuthViewModel : ViewModel() {
     }
 
     private fun triggerBiometric() {
-        Log.d(TAG, "triggerBiometric(): false → true toggle")
-
         _biometricEvent.value = false
         _biometricEvent.value = true
     }
 
     fun runPending() {
-        Log.d(TAG, "runPending() called")
-
         pendingAction?.invoke()
         pendingAction = null
-
         _biometricEvent.value = false
     }
 
