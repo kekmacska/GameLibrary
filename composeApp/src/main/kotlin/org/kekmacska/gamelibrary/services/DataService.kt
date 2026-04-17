@@ -39,7 +39,7 @@ object KtorClientProvider {
             install(Logging) {
                 logger = object : Logger {
                     override fun log(message: String) {
-                        println("KTOR DEBUG: $message")
+                        //println("KTOR DEBUG: $message")
                     }
                 }
                 level = LogLevel.ALL
