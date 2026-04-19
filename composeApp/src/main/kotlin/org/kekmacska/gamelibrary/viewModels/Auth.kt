@@ -38,8 +38,6 @@ class AuthViewModel : ViewModel() {
                 try {
                     val response = login(email, password)
 
-                    Log.d(TAG, "login response received")
-
                     if (!response.token.isNullOrBlank()) {
                         TokenStorage(context).saveToken(response.token)
                         context.saveLoggedIn()
