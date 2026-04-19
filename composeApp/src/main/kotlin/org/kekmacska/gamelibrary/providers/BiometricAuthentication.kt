@@ -33,7 +33,7 @@ class BiometricAuthenticationProvider {
 
         val fragmentActivity = activity as? FragmentActivity
         if (fragmentActivity == null) {
-            Log.e("BIOMETRIC_DEBUG", "NOT A FragmentActivity → cannot run biometric prompt")
+            Log.e("BIOMETRIC_DEBUG", "NOT A FragmentActivity, cannot run biometric prompt")
             onCancel()
             return
         }
